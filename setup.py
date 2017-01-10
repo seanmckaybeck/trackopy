@@ -32,8 +32,10 @@ setup(
         'Operating System :: OS Independent',
         'Programming Language :: Python',
         'Topic :: Internet :: WWW/HTTP :: Dynamic Content',
-        'Topic :: Software Development :: Libraries :: Python Modules'
+        'Topic :: Software Development :: Libraries :: Python Modules',
+        'Programming Language :: Python :: 3'
     ],
-    test_suite='tests'
+    test_suite='tests',
+    keywords='trackobot hearthstone'
 )
 
