@@ -5,12 +5,9 @@ class Trackobot:
     def __init__(self, username, password):
         self._username = username
         self._password = password
-        self._params = {'username': username, 'password': password}
         self._auth = requests.auth.HTTPBasicAuth(username, password)
         self._url = 'https://trackobot.com/'
-        self._allowed_params = ['added', 'mode', 'win', 'hero', 'opponenet',
-                                'coin', 'duration', 'rank', 'legend', 'deck_id',
-                                'opponent_deck_id', 'note']
+
     @staticmethod
     def create_user(self) -> dict:
         """
@@ -65,9 +62,13 @@ class Trackobot:
         :param str value: The new value for the parameter
         :return: True if successfully changed, False otherwise
         :rtype: bool
+        :raises: ValueError
         """
-        if param not in self._allowed_params:
-            raise ValueError('param must be one of ' + ', '.join(self._allowed_params))
+        allowed_params = ['added', 'mode', 'win', 'hero', 'opponenet',
+                          'coin', 'duration', 'rank', 'legend', 'deck_id',
+                          'opponent_deck_id', 'note']
+        if param not in allowed_params:
+            raise ValueError('param must be one of ' + ', '.join(allowed_params))
         endpoint = '/profile/results/'
         url = self._url + endpoint + str(game_id)
         data = {param: value}
@@ -89,6 +90,7 @@ class Trackobot:
         :return: Dictionary of stats
         :rtype: dict
         :raises: requests.exceptions.HTTPError on error
+        :raises: ValueError
         """
         allowed = ['classes', 'decks', 'arena']
         if stats_type not in allowed:
@@ -122,6 +124,7 @@ class Trackobot:
         :param list modes: A list of the modes to reset
         :return: None
         :raises: requests.exceptions.HTTPError on error
+        :raises: ValueError
         """
         allowed = ['ranked', 'casual', 'practice', 'arena', 'friendly']
         if modes is None:
@@ -149,6 +152,68 @@ class Trackobot:
         url = self._url + endpoint
         params = {'page': page}
         r = requests.get(url, auth=self._auth, params=params)
+        r.raise_for_status()
+        return r.json()
+
+    def arena_history(self, page: int=1) -> dict:
+        """
+        Get arena game history for the user by page.
+        Returns JSON as a dictionary representing each game.
+
+        :param int page: The page number
+        :return: Dictionary of game data
+        :rtype: dict
+        :raises: requests.exceptions.HTTPError on error
+        """
+        endpoint = '/profile/arena.json' 
+        url = self._url + endpoint
+        params = {'page': page}
+        r = requests.get(url, auth=self._auth, params=params)
+        r.raise_for_status()
+        return r.json()
+
+    def toggle_tracking(self, enabled: bool=True):
+        """
+        Enable or disable automatic deck tracking
+
+        :param bool enabled: If True, tracking is enabled, else it is disabled
+        :return None:
+        :raises: requests.exceptions.HTTPError on error
+        """
+        endpoint = '/profile/settings/decks/toggle'
+        url = self._url + endpoint
+        data = {'user': {'deck_tracking': enabled}}
+        r = requests.post(url, auth=self._auth, data=data)
+        r.raise_for_status()
+
+    def delete_game(self, game_id: int):
+        """
+        Delete the specified game from Trackobot.
+
+        :param int game_id: The ID of the game to delete
+        :return: None
+        """
+        endpoint = '/profile/results/' + str(game_id)
+        url = self._url + endpoint
+        r = requests.delete(url, auth=self._auth)
+        r.raise_for_status()
+
+    def upload_game(self, game_data: dict) -> dict:
+        """
+        Upload a new game's data to Trackobot.
+        This method assumes you have properly formatted your
+          game data dictionary.
+        For instructions on how to do so, please follow the guide
+          here: https://gist.github.com/stevschmid/120adcbc5f1f7cb31bc5
+
+        :param dict game_data: The metadata and card data for the new game
+        :return: JSON dictionary of the newly created game
+        :rtype: dict
+        :raises: requests.exceptions.HTTPError on error
+        """
+        endpoint = '/profile/results.json'
+        url = self._url + endpoint
+        r = requests.post(url, auth=self._auth, json=game_data)
         r.raise_for_status()
         return r.json()
 
