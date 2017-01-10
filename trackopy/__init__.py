@@ -6,6 +6,8 @@ __copyright__ = 'Copyright 2017 Sean Beck'
 
 from .trackobot import Trackobot
 
+__all__ = ['Trackobot']
+
 import logging
 try:
     from logging import NullHandler
