@@ -9,7 +9,7 @@ class Trackobot:
         self._url = 'https://trackobot.com/'
 
     @staticmethod
-    def create_user(self) -> dict:
+    def create_user() -> dict:
         """
         Create a new username and password in Trackobot.
         Returns JSON of the format {'username': 'newuser', 'password': 'password}
