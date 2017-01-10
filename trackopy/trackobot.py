@@ -6,7 +6,7 @@ class Trackobot:
         self._username = username
         self._password = password
         self._auth = requests.auth.HTTPBasicAuth(username, password)
-        self._url = 'https://trackobot.com/'
+        self._url = 'https://trackobot.com'
 
     @staticmethod
     def create_user() -> dict:
@@ -48,7 +48,7 @@ class Trackobot:
         r.raise_for_status()
         return r.json()['url'] if 'error' not in r.json() else r.json()['error']
 
-    def modify_metadata(game_id: int, param: str, value: str) -> bool:
+    def modify_metadata(self, game_id: int, param: str, value: str) -> bool:
         """
         Modify the metadata of a specified game.
         Possible parameters that can be changed are: added, mode, win,
@@ -133,7 +133,7 @@ class Trackobot:
             raise ValueError('modes list can only contain ' + ', '.join(allowed))
         endpoint = '/profile/settings/account/reset'
         url = self._url + endpoint
-        data = {'reset_modes': modes}
+        data = {'reset_modes[]': modes}
         r = requests.post(url, auth=self._auth, data=data)
         r.raise_for_status()
 
@@ -142,6 +142,7 @@ class Trackobot:
         Get game history for the user by page.
         Each page contains 15 games.
         Returns JSON as a dictionary representing each game.
+        Note that this will include arena matches.
 
         :param int page: The page number
         :return: Dictionary of game data
@@ -182,7 +183,8 @@ class Trackobot:
         """
         endpoint = '/profile/settings/decks/toggle'
         url = self._url + endpoint
-        data = {'user': {'deck_tracking': enabled}}
+        val = 'true' if enabled else 'false'
+        data = {'user[deck_tracking]': val, '_method': 'put'}
         r = requests.post(url, auth=self._auth, data=data)
         r.raise_for_status()
 
