@@ -52,8 +52,8 @@ class Trackobot:
         """
         Modify the metadata of a specified game.
         Possible parameters that can be changed are: added, mode, win,
-          hero, opponent, coin, duration, rank, legend, deck_id,
-          opponent_deck_id, note
+        hero, opponent, coin, duration, rank, legend, deck_id,
+        opponent_deck_id, note.
         It is up to the user to know the correct possible values for each
         of these parameters.
 
@@ -82,9 +82,9 @@ class Trackobot:
         """
         Get the user's statistics by deck, class, or for arena.
         You must specify one of "decks", "classes", or "arena" for
-          the stats_type.
+        the stats_type.
         This will return a dictionary with statistics associated with
-          the requested type.
+        the requested type.
 
         :param str stats_type: The type of stats you want to see. One of decks, classes, arena
         :return: Dictionary of stats
@@ -119,7 +119,7 @@ class Trackobot:
         """
         Reset the user's account data for the specified game modes.
         Supported modes values are "ranked", "casual", "practice",
-          "arena", and "friendly".
+        "arena", and "friendly".
 
         :param list modes: A list of the modes to reset
         :return: None
@@ -204,9 +204,9 @@ class Trackobot:
         """
         Upload a new game's data to Trackobot.
         This method assumes you have properly formatted your
-          game data dictionary.
+        game data dictionary.
         For instructions on how to do so, please follow the guide
-          here: https://gist.github.com/stevschmid/120adcbc5f1f7cb31bc5
+        here: https://gist.github.com/stevschmid/120adcbc5f1f7cb31bc5
 
         :param dict game_data: The metadata and card data for the new game
         :return: JSON dictionary of the newly created game
