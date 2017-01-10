@@ -1,5 +1,4 @@
 # trackopy
-A Python library for the Track-o-bot API
 
 ## Overview
 
@@ -48,7 +47,7 @@ arena_history = trackobot.arena_history()
 ```
 
 In addition to the above, you can upload games, modify game metadata, delete games, or toggle automatic deck tracking.
-To learn more about the available functionality, please [read the docs]().
+To learn more about the available functionality, please [read the docs](https://trackopy.readthedocs.io/en/latest/).
 
 ## License
 
