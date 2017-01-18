@@ -57,7 +57,7 @@ You can read more in the LICENSE file.
 ## Testing
 
 Unit tests are available in the `tests` directory.
-They can be run directly or via the `setup.py` script.
+They can be run directly or via the `setup.py` script using `python setup.py test`.
 
 ## Pull requests
 

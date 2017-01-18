@@ -1,3 +1,4 @@
+import datetime
 import unittest
 
 import requests
@@ -23,8 +24,42 @@ class TestTB(unittest.TestCase):
         assert 'stats' in stats
         stats = self.t.stats(stats_type='arena')
         assert 'stats' in stats
+        stats = self.t.stats(mode='ranked')
+        assert 'stats' in stats
+        stats = self.t.stats(mode='arena')
+        assert 'stats' in stats
+        stats = self.t.stats(mode='casual')
+        assert 'stats' in stats
+        stats = self.t.stats(mode='friendly')
+        assert 'stats' in stats
+        stats = self.t.stats(time_range='current_month')
+        assert 'stats' in stats
+        stats = self.t.stats(time_range='last_3_days')
+        assert 'stats' in stats
+        stats = self.t.stats(time_range='last_24_hours')
+        assert 'stats' in stats
+        today = datetime.datetime.now()
+        yesterday = today - datetime.timedelta(days=1)
+        stats = self.t.stats(time_range='custom', start=yesterday, end=today)
+        assert 'stats' in stats
         with self.assertRaises(ValueError):
             self.t.stats(stats_type='badstr')
+        with self.assertRaises(ValueError):
+            self.t.stats(mode='badstr')
+        with self.assertRaises(ValueError):
+            self.t.stats(time_range='badstr')
+        # end is None
+        with self.assertRaises(TypeError):
+            self.t.stats(time_range='custom', start=today)
+        # start is None
+        with self.assertRaises(TypeError):
+            self.t.stats(time_range='custom', end=today)
+        # type(start) != datetime.datetime
+        with self.assertRaises(TypeError):
+            self.t.stats(time_range='custom', start='', end=today)
+        # type(end) != datetime.datetime
+        with self.assertRaises(TypeError):
+            self.t.stats(time_range='custom', end='', start=today)
 
     def test_decks(self):
         decks = self.t.decks()

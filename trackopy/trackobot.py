@@ -1,3 +1,5 @@
+import datetime
+
 import requests
 
 
@@ -78,26 +80,43 @@ class Trackobot:
         else:
             return False
 
-    def stats(self, stats_type: str='decks') -> dict:
+    def stats(self, stats_type: str='decks', time_range: str='all', mode: str='all',
+              start: datetime.datetime=None, end: datetime.datetime=None) -> dict:
         """
         Get the user's statistics by deck, class, or for arena.
-        You must specify one of "decks", "classes", or "arena" for
-        the stats_type.
         This will return a dictionary with statistics associated with
-        the requested type.
+        the requested type. You can specify a time range to search under
+        as well as what modes to get stats for.
 
         :param str stats_type: The type of stats you want to see. One of decks, classes, arena
+        :param str time_range: A time range to get stats for. One of current_month, all, last_3_days, last_24_hours, custom
+        :param str mode: The game mode to get stats for. One of ranked, arena, casual, friendly, all
+        :param datetime.datetime start: If using "custom" for time_range, a starting datetime.datetime date
+        :param datetime.datetime end: If using "custom" for time_range, an ending datetime.datetime date
         :return: Dictionary of stats
         :rtype: dict
         :raises: requests.exceptions.HTTPError on error
         :raises: ValueError
+        :raises: TypeError
         """
-        allowed = ['classes', 'decks', 'arena']
-        if stats_type not in allowed:
-            raise ValueError('stats_type must be one of ' + ', '.join(allowed))
+        allowed_endpoints = ['classes', 'decks', 'arena']
+        allowed_range = ['current_month', 'all', 'last_3_days', 'last_24_hours', 'custom']
+        allowed_modes = ['ranked', 'arena', 'casual', 'friendly', 'all']
+        if stats_type not in allowed_endpoints:
+            raise ValueError('stats_type must be one of ' + ', '.join(allowed_endpoints))
+        if time_range not in allowed_range:
+            raise ValueError('time_range must be one of ' + ', '.join(allowed_range))
+        if mode not in allowed_modes:
+            raise ValueError('mode must be one of ' + ', '.join(allowed_modes))
+        if time_range == 'custom' and \
+            (start is None or end is None or type(start) != datetime.datetime or type(end) != datetime.datetime):
+            raise TypeError('If using "custom" mode then you must specify a datetime.datetime for start and end')
         endpoint = '/profile/stats/{}.json'.format(stats_type)
+        params = {'mode': mode, 'time_range': time_range}
+        if 'custom' == time_range:
+            params.update({'start': start.strftime('%Y-%m-%d'), 'end': start.strftime('%Y-%m-%d')})
         url = self._url + endpoint
-        r = requests.get(url, auth=self._auth)
+        r = requests.get(url, auth=self._auth, params=params)
         r.raise_for_status()
         return r.json()
 
