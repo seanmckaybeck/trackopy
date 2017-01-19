@@ -42,6 +42,10 @@ class TestTB(unittest.TestCase):
         yesterday = today - datetime.timedelta(days=1)
         stats = self.t.stats(time_range='custom', start=yesterday, end=today)
         assert 'stats' in stats
+        stats = self.t.stats(stats_type='classes', as_hero='shaman', vs_hero='warrior')
+        assert 'stats' in stats
+        stats = self.t.stats(stats_type='decks', as_deck=2, vs_deck=5)
+        assert 'stats' in stats
         with self.assertRaises(ValueError):
             self.t.stats(stats_type='badstr')
         with self.assertRaises(ValueError):
@@ -97,7 +101,7 @@ class TestTB(unittest.TestCase):
                 break
 
     def test_history(self):
-        self.upload()
+        self.upload(**{'deck_id': 'aggro', 'opponent_deck_id': 'pirate'})
         history = self.t.history()
         assert 'history' in history
         assert len(history['history']) != 0
@@ -128,9 +132,11 @@ class TestTB(unittest.TestCase):
         ids = [g['id'] for g in history['history']]
         assert game['id'] not in ids
 
-    def upload(self, mode='ranked'):
+    def upload(self, mode='ranked', **kwargs):
         data = {'result': {'hero': 'Shaman', 'opponent': 'Warrior', 'mode': mode,
-            'coin': False, 'win': True}}
+            'coin': False, 'win': True }}
+        if kwargs:
+            data.update(**kwargs)
         game = self.t.upload_game(data)
         return game
 

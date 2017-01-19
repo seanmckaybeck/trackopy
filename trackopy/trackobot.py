@@ -84,7 +84,8 @@ class Trackobot:
             return False
 
     def stats(self, stats_type: str='decks', time_range: str='all', mode: str='all',
-              start: datetime.datetime=None, end: datetime.datetime=None) -> dict:
+              start: datetime.datetime=None, end: datetime.datetime=None,
+              as_hero: str=None, vs_hero: str=None, as_deck: int=None, vs_deck: int=None) -> dict:
         """
         Get the user's statistics by deck, class, or for arena.
         This will return a dictionary with statistics associated with
@@ -96,6 +97,10 @@ class Trackobot:
         :param str mode: The game mode to get stats for. One of ranked, arena, casual, friendly, all
         :param datetime.datetime start: If using "custom" for time_range, a starting datetime.datetime date
         :param datetime.datetime end: If using "custom" for time_range, an ending datetime.datetime date
+        :param str as_hero: If getting by class, only get stats for playing as the specified hero
+        :param str vs_hero: If getting by class, only get stats for playing against the specified hero
+        :param int as_deck: If getting by deck, only get stats for playing as the specified deck. Get the deck id from a call to decks()
+        :param int vs_deck: If getting by deck, only get stats for playing against the specified deck. Get the deck id from a call to decks()
         :return: Dictionary of stats
         :rtype: dict
         :raises: requests.exceptions.HTTPError on error
@@ -118,6 +123,10 @@ class Trackobot:
         params = {'mode': mode, 'time_range': time_range}
         if 'custom' == time_range:
             params.update({'start': start.strftime('%Y-%m-%d'), 'end': start.strftime('%Y-%m-%d')})
+        if mode == 'decks':
+            params.update({'as_deck': as_deck, 'vs_deck': vs_deck})
+        elif mode == 'classes':
+            params.update({'as_hero': as_hero, 'vs_hero': vs_hero})
         url = self._url + endpoint
         r = requests.get(url, auth=self._auth, params=params)
         r.raise_for_status()
