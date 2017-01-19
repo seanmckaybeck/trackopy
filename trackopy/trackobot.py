@@ -24,17 +24,20 @@ class Trackobot:
         r.raise_for_status()
         return r.json()
 
-    def rename_user(self, user_id: int):
+    def rename_user(self, name: str):
         """
         Rename your user to something else.
-        Not yet implemented because user ID is not available in an API call
 
-        :param int user_id: The ID representing your user in the trackobot database
-        :return:
+        :param str name: The new display name
+        :return: None
         """
-        # endpoint = '/users/{}/rename'.format(str(user_id))
-        # url = self._url + endpoint
-        raise NotImplemented('Not yet implemented because user ID unavailable')
+        r = requests.get('https://trackobot.com/profile', auth=self._auth)
+        user_id = r.text.split('edit_user_',1)[1].split('"')[0]
+        endpoint = '/users/{}/rename'.format(user_id)
+        url = self._url + endpoint
+        data = {'_method': 'patch', 'user[displayname]': name}
+        r = requests.post(url, auth=self._auth, data=data)
+        r.raise_for_status()
 
     def one_time_auth(self) -> str:
         """

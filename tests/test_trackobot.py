@@ -144,6 +144,12 @@ class TestTB(unittest.TestCase):
         assert 'username' in data
         assert 'password' in data
 
+    def test_rename_user(self):
+        try:
+            self.t.rename_user('stan darsh')
+        except requests.exceptions.HTTPError:
+            self.fail('rename_user() raised an exception')
+
 
 if __name__ == '__main__':
     unittest.main()
