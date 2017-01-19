@@ -101,6 +101,8 @@ class TestTB(unittest.TestCase):
         history = self.t.history()
         assert 'history' in history
         assert len(history['history']) != 0
+        history = self.t.history(query='Shaman')
+        assert 'history' in history
 
     def test_arena_history(self):
         self.upload(mode='arena')

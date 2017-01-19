@@ -156,7 +156,7 @@ class Trackobot:
         r = requests.post(url, auth=self._auth, data=data)
         r.raise_for_status()
 
-    def history(self, page: int=1) -> dict:
+    def history(self, page: int=1, query: str=None) -> dict:
         """
         Get game history for the user by page.
         Each page contains 15 games.
@@ -164,6 +164,7 @@ class Trackobot:
         Note that this will include arena matches.
 
         :param int page: The page number
+        :param str query: A query string to narrow results
         :return: Dictionary of game data
         :rtype: dict
         :raises: requests.exceptions.HTTPError on error
@@ -171,6 +172,8 @@ class Trackobot:
         endpoint = '/profile.json' 
         url = self._url + endpoint
         params = {'page': page}
+        if query is not None:
+            params['query'] = query
         r = requests.get(url, auth=self._auth, params=params)
         r.raise_for_status()
         return r.json()
