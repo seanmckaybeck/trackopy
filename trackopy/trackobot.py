@@ -123,9 +123,9 @@ class Trackobot:
         params = {'mode': mode, 'time_range': time_range}
         if 'custom' == time_range:
             params.update({'start': start.strftime('%Y-%m-%d'), 'end': start.strftime('%Y-%m-%d')})
-        if mode == 'decks':
+        if stats_type == 'decks':
             params.update({'as_deck': as_deck, 'vs_deck': vs_deck})
-        elif mode == 'classes':
+        elif stats_type == 'classes':
             params.update({'as_hero': as_hero, 'vs_hero': vs_hero})
         url = self._url + endpoint
         r = requests.get(url, auth=self._auth, params=params)
