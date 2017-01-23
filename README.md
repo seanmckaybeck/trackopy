@@ -49,6 +49,11 @@ arena_history = trackobot.arena_history()
 In addition to the above, you can upload games, modify game metadata, delete games, or toggle automatic deck tracking.
 To learn more about the available functionality, please [read the docs](https://trackopy.readthedocs.io/en/latest/).
 
+Please ensure you are using your Trackobot **password**, not your Trackobot API key.
+You can get your password from the Trackobot desktop app by exporting your user data to a file.
+Your password will be the second string in the file with spaces between each character.
+Remove the spaces and you should have a password of length 8.
+
 ## License
 
 This project is licensed under the MIT license.

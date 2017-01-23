@@ -5,10 +5,14 @@ import requests
 
 class Trackobot:
     def __init__(self, username, password):
+        self._url = 'https://trackobot.com'
+        r = requests.post(self._url+'/sessions', data={'username': username, 'password': password})
+        r.raise_for_status()
+        if 'Invalid credentials' in r.text:
+            raise ValueError('Incorrect username or password. API token is not supported.')
         self._username = username
         self._password = password
         self._auth = requests.auth.HTTPBasicAuth(username, password)
-        self._url = 'https://trackobot.com'
 
     @staticmethod
     def create_user() -> dict:
