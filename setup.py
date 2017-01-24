@@ -5,7 +5,7 @@ from setuptools import setup
 import trackopy
 
 
-with open('README.md') as r:
+with open('README.rst') as r:
     readme = r.read()
 
 
