@@ -1,6 +1,6 @@
 """
 """
-from setuptools import setup
+from setuptools import setup, find_packages
 
 import trackopy
 
@@ -18,7 +18,7 @@ setup(
     author_email='seanmckaybeck@gmail.com',
     description='Python wrapper for the Trackobot API',
     long_description=readme,
-    packages=['trackopy'],
+    packages=find_packages(),#['trackopy'],
     zip_safe=False,
     include_package_data=True,
     platforms='any',
@@ -36,6 +36,10 @@ setup(
         'Programming Language :: Python :: 3'
     ],
     test_suite='tests',
-    keywords='trackobot hearthstone'
+    keywords='trackobot hearthstone',
+    entry_points='''
+        [console_scripts]
+        tb=trackopy.scripts.tb:cli
+    '''
 )
 
