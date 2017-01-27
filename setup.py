@@ -23,7 +23,8 @@ setup(
     include_package_data=True,
     platforms='any',
     install_requires=[
-        'requests'
+        'requests',
+        'click'
     ],
     classifiers=[
         'Environment :: Web Environment',
