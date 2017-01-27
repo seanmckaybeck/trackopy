@@ -60,6 +60,16 @@ app by exporting your user data to a file. Your password will be the
 second string in the file with spaces between each character. Remove the
 spaces and you should have a password of length 8.
 
+CLI
+===
+
+Starting with v2.0, there is an included CLI utility for interacting with trackobot.com.
+It serves as an example of how to use the library as well as a convenient way of getting data quickly.
+Some people may only need simple functionality from this library, and this utility provides that.
+It implements all available commands in ``trackopy``.
+It is installed with the library and can be run with the ``tb`` command.
+See all arguments and functionality with ``tb --help``.
+
 License
 -------
 
