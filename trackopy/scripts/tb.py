@@ -170,7 +170,7 @@ def toggle(config, track):
 @click.option('-i', '--id', type=int, help='The ID of the game to modify', required=True)
 @click.option('-p', '--param', required=True,
               help='The name of the game metadata variable to change, i.e. "rank", "win", etc.',
-              type=click.Choice(['added', 'mode', 'win', 'hero', 'opponenet',
+              type=click.Choice(['added', 'mode', 'win', 'hero', 'opponent',
                                  'coin', 'duration', 'rank', 'legend', 'deck_id',
                                  'opponent_deck_id', 'note']))
 @click.option('-v', '--value', help='The new value for the given parameter', required=True)
